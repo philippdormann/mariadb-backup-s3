@@ -12,12 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Get the version hash
-      id: vars-hash
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-    - name: get the current tag
-      id: vars-tag
-      run: echo "::set-output name=current_tag::$(git describe --tags --abbrev=0)"
+    - name: Get the version
+      id: vars
+      run: |
+        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        echo "::set-output name=current_tag::$(git describe --tags --abbrev=0)"
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag philippdormann/mariadb-backup-s3:${{steps.vars.outputs.sha_short}} --tag philippdormann/mariadb-backup-s3:${{steps.vars.outputs.current_tag}} --tag philippdormann/mariadb-backup-s3
     - name: Login to Dockerhub
