@@ -27,9 +27,3 @@ jobs:
       run:  docker push philippdormann/mariadb-backup-s3:${{steps.vars.outputs.current_tag}}
     - name: Push the :latest Docker image
       run:  docker push philippdormann/mariadb-backup-s3
-    - name: Create GitHub release
-      uses: Roang-zero1/github-create-release-action@v3
-      with:
-        version_regex: ^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
