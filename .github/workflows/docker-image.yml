@@ -1,10 +1,8 @@
 name: Docker Image CI
-
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - '*'
 
 jobs:
 
@@ -14,14 +12,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Get the version
-      id: vars
+    - name: Get the version hash
+      id: vars-hash
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: get the current tag
+      id: vars-tag
+      run: echo "::set-output name=current_tag::$(git describe --tags --abbrev=0)"
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag philippdormann/mariadb-backup-s3:${{steps.vars.outputs.sha_short}} --tag philippdormann/mariadb-backup-s3
+      run: docker build . --file Dockerfile --tag philippdormann/mariadb-backup-s3:${{steps.vars.outputs.sha_short}} philippdormann/mariadb-backup-s3:${{steps.vars.outputs.current_tag}} --tag philippdormann/mariadb-backup-s3
     - name: Login to Dockerhub
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     - name: Push the Docker image
       run:  docker push philippdormann/mariadb-backup-s3:${{steps.vars.outputs.sha_short}}
+    - name: Push the Docker image
+      run:  docker push philippdormann/mariadb-backup-s3:${{steps.vars.outputs.current_tag}}
     - name: Push the :latest Docker image
       run:  docker push philippdormann/mariadb-backup-s3
