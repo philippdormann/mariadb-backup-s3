@@ -1,3 +1,4 @@
+
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -16,18 +17,24 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: mysql-backup-my-app
-            image: backuptools/mysql-backup-s3
+            image: philippdormann/mariadb-backup-s3
             env:
-              - name: S3_URI
-                value: https://your-key:your-secret@s3.host.tld
+              - name: S3_ACCESS
+                value: xxxxxx
+              - name: S3_SECRET
+                value: yyyyyyyyyyyyyyyyyy
+              - name: S3_SERVER
+                value: s3.endpoint.com
               - name: S3_NAME
                 value: folder-name/backup-name
-              - name: S3_BUCK
+              - name: S3_BUCKET
                 value: backup-s3-bucket-name
-              - name: MYSQL_USER
+              - name: DB_USER
                 value: user
-              - name: MYSQL_PASSWORD
+              - name: DB_PASSWORD
                 value: password
-              - name: MYSQL_HOST
+              - name: DB_HOST
                 value: host-or-service-name
+              - name: DB_PORT
+                value: port
 ---

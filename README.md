@@ -1,31 +1,30 @@
 # MySQL/MariaDB S3 docker/kubernetes backup
 
-[![Build status](https://github.com/BackupTools/mysql-backup-s3/workflows/Docker%20Image%20CI/badge.svg)]() [![Pulls](https://img.shields.io/docker/pulls/backuptools/mysql-backup-s3?style=flat&labelColor=1B3D4B&color=06A64F&logoColor=white&logo=docker&label=pulls)]()
+[![Build status](https://github.com/philippdormann/mariadb-backup-s3/workflows/Docker%20Image%20CI/badge.svg)]() [![Pulls](https://img.shields.io/docker/pulls/philippdormann/mariadb-backup-s3?style=flat&labelColor=1B3D4B&color=06A64F&logoColor=white&logo=docker&label=pulls)]()
 
 Docker image to backup MySQL or MariaDB (or PerconaDB) database to S3 using mysqldump and compress using pigz.
 
-## Advantages/features
+## Features
 - [x] Supports custom S3 endpoints (e.g. minio)
 - [x] Uses piping instead of tmp file
 - [x] Compression is done with pigz (parallel gzip)
-- [x] Creates bucket if it's not created
 - [x] Can be run in Kubernetes or Docker
-- [x] Possibility to detect and backup all databases [testing]
-- [x] PGP encryption
-- [ ] TODO: Add other compression methods
-- [ ] TODO: Add other dbs (e.g. postgres, mysql)
+- [x] Backup all databases
+- [x] Backup schedule
 
 ## Configuration
 ```bash
-S3_BUCK=mysql1-backups
-S3_NAME=folder-name/backup-name-prefix
-S3_URI=https://s3-key:s3-secret@s3.host.tld
-MYSQL_USER=user
-MYSQL_PASSWORD=password
-MYSQL_HOST=host-or-service-name
-MYSQL_PORT=3307 # (optional) defaults to 3306
-GPG_KEYSERVER=keyserver.ubuntu.com # your hpks keyserver
-GPG_KEYID=<key_id> # recipient key, backup will be encrypted if added
+- FILE_PREFIX=
+- S3_BUCKET=
+- S3_ACCESS=
+- S3_SECRET=
+- S3_SERVER=
+- DB_USER=
+- DB_PASSWORD=
+- DB_HOST=
+- DB_PORT=# (optional) defaults to 3306
+- WAIT_SECONDS=86400
+- INITIAL_BACKUP=yes
 ```
 
 Or see `docker-compose.yml` file to run this container with Docker.
